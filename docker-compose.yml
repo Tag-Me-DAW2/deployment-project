@@ -8,6 +8,16 @@ services:
       VIRTUAL_HOST: bank-tagme.preproducciondaw.cip.fpmislata.com
     networks:
       - proxy_red
+  
+  front-adm:
+    build:
+      context: .
+      dockerfile: adm-front.Dockerfile
+    container_name: front-adm-tagme
+    environment:
+      VIRTUAL_HOST: adm-tagme.preproducciondaw.cip.fpmislata.com
+    networks:
+      - proxy_red
 
   back-bank:
     build:
@@ -19,6 +29,20 @@ services:
       SPRING_PROFILES_ACTIVE: pre
     depends_on:
       mariadb-bank:
+        condition: service_healthy
+    networks:
+      - proxy_red
+
+  back-store:
+    build:
+      context: .
+      dockerfile: store-back.Dockerfile
+    container_name: back-store-tagme
+    environment:
+      VIRTUAL_HOST: store-back-tagme.preproducciondaw.cip.fpmislata.com
+      SPRING_PROFILES_ACTIVE: pre
+    depends_on:
+      mariadb-store:
         condition: service_healthy
     networks:
       - proxy_red
@@ -35,6 +59,23 @@ services:
       - proxy_red
     healthcheck:
       test: ["CMD-SHELL", "mariadb -u tagme-bank -ptagme-bank -e 'SELECT 1'"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 30s
+
+  mariadb-store:
+    image: mariadb:latest
+    container_name: mariadb-tagme-store
+    environment:
+      MYSQL_ROOT_PASSWORD: tagme-store
+      MYSQL_DATABASE: db_tagme_store
+      MYSQL_USER: tagme-store
+      MYSQL_PASSWORD: tagme-store
+    networks:
+      - proxy_red
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb -u tagme-store -ptagme-store -e 'SELECT 1'"]
       interval: 10s
       timeout: 5s
       retries: 2
