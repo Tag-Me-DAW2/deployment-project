@@ -1,0 +1,47 @@
+services:
+  front-bank:
+    build:
+      context: .
+      dockerfile: bank-front.Dockerfile
+    container_name: front-bank-tagme
+    environment:
+      VIRTUAL_HOST: bank-tagme.preproducciondaw.cip.fpmislata.com
+    networks:
+      - proxy_red
+
+  back-bank:
+    build:
+      context: .
+      dockerfile: bank-back.Dockerfile
+    container_name: back-bank-tagme
+    environment:
+      VIRTUAL_HOST: bank-back-tagme.preproducciondaw.cip.fpmislata.com
+      SPRING_PROFILES_ACTIVE: pre
+    depends_on:
+      mariadb-bank:
+        condition: service_healthy
+    networks:
+      - proxy_red
+
+  mariadb-bank:
+    image: mariadb:latest
+    container_name: mariadb-tagme-bank
+    environment:
+      MYSQL_ROOT_PASSWORD: tagme-bank
+      MYSQL_DATABASE: db_tagme_bank
+      MYSQL_USER: tagme-bank
+      MYSQL_PASSWORD: tagme-bank
+    networks:
+      - proxy_red
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb -u tagme-bank -ptagme-bank -e 'SELECT 1'"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 30s
+
+networks:
+  proxy_red:
+    name: nginx-proxy-network
+    external: true
+
