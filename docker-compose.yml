@@ -61,7 +61,7 @@ services:
       test: ["CMD-SHELL", "mariadb -u tagme-bank -ptagme-bank -e 'SELECT 1'"]
       interval: 10s
       timeout: 5s
-      retries: 2
+      retries: 5
       start_period: 30s
 
   mariadb-store:
@@ -78,7 +78,7 @@ services:
       test: ["CMD-SHELL", "mariadb -u tagme-store -ptagme-store -e 'SELECT 1'"]
       interval: 10s
       timeout: 5s
-      retries: 2
+      retries: 5
       start_period: 30s
 
 networks:
