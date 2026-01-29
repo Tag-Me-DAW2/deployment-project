@@ -8,7 +8,7 @@ RUN git clone https://github.com/Tag-Me-DAW2/store-client-frontend.git
 WORKDIR /opt/app/store-client-frontend
 RUN git switch --detach origin/develop
 RUN npm ci
-RUN npm run build --prod
+RUN npm run build -- --configuration production
 
 FROM nginx:1.28.0-alpine3.21
 COPY --from=build /opt/app/store-client-frontend/dist/store-client-frontend/browser/ /usr/share/nginx/html

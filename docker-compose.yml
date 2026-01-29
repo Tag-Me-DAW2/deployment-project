@@ -5,7 +5,7 @@ services:
       dockerfile: bank-front.Dockerfile
     container_name: front-bank-tagme
     environment:
-      VIRTUAL_HOST: bank-tagme.preproducciondaw.cip.fpmislata.com
+      VIRTUAL_HOST: tagme-bank-back.producciondaw.cip.fpmislata.com
     networks:
       - proxy_red
 
@@ -15,7 +15,7 @@ services:
       dockerfile: adm-front.Dockerfile
     container_name: front-adm-tagme
     environment:
-      VIRTUAL_HOST: adm-tagme.preproducciondaw.cip.fpmislata.com
+      VIRTUAL_HOST: tagme-admin.producciondaw.cip.fpmislata.com
     networks:
       - proxy_red
 
@@ -25,7 +25,7 @@ services:
       dockerfile: client-front.Dockerfile
     container_name: front-client-tagme
     environment:
-      VIRTUAL_HOST: client-tagme.preproducciondaw.cip.fpmislata.com
+      VIRTUAL_HOST: tagme-client.producciondaw.cip.fpmislata.com
     networks:
       - proxy_red
 
@@ -35,7 +35,7 @@ services:
       dockerfile: bank-back.Dockerfile
     container_name: back-bank-tagme
     environment:
-      VIRTUAL_HOST: bank-back-tagme.preproducciondaw.cip.fpmislata.com
+      VIRTUAL_HOST: tagme-bank.producciondaw.cip.fpmislata.com
       SPRING_PROFILES_ACTIVE: pre
     depends_on:
       mariadb-bank:
@@ -49,7 +49,7 @@ services:
       dockerfile: store-back.Dockerfile
     container_name: back-store-tagme
     environment:
-      VIRTUAL_HOST: store-back-tagme.preproducciondaw.cip.fpmislata.com
+      VIRTUAL_HOST: tagme-store-back.producciondaw.cip.fpmislata.com
       SPRING_PROFILES_ACTIVE: pre
     depends_on:
       mariadb-store:
