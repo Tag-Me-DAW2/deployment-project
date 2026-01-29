@@ -8,7 +8,7 @@ services:
       VIRTUAL_HOST: bank-tagme.preproducciondaw.cip.fpmislata.com
     networks:
       - proxy_red
-  
+
   front-adm:
     build:
       context: .
@@ -16,6 +16,16 @@ services:
     container_name: front-adm-tagme
     environment:
       VIRTUAL_HOST: adm-tagme.preproducciondaw.cip.fpmislata.com
+    networks:
+      - proxy_red
+
+  front-client:
+    build:
+      context: .
+      dockerfile: client-front.Dockerfile
+    container_name: front-client-tagme
+    environment:
+      VIRTUAL_HOST: client-tagme.preproducciondaw.cip.fpmislata.com
     networks:
       - proxy_red
 
