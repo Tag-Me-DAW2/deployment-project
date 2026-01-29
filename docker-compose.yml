@@ -5,7 +5,7 @@ services:
       dockerfile: bank-front.Dockerfile
     container_name: front-bank-tagme
     environment:
-      VIRTUAL_HOST: tagme-bank-back.producciondaw.cip.fpmislata.com
+      VIRTUAL_HOST: tagme-bank.producciondaw.cip.fpmislata.com
     networks:
       - proxy_red
 
@@ -35,7 +35,7 @@ services:
       dockerfile: bank-back.Dockerfile
     container_name: back-bank-tagme
     environment:
-      VIRTUAL_HOST: tagme-bank.producciondaw.cip.fpmislata.com
+      VIRTUAL_HOST: tagme-bank-back.producciondaw.cip.fpmislata.com
       SPRING_PROFILES_ACTIVE: pre
     depends_on:
       mariadb-bank:
