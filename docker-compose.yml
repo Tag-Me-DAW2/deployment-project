@@ -7,7 +7,7 @@ services:
         BUILD_ENV: ${BUILD_ENV}
     container_name: front-bank-tagme
     environment:
-      VIRTUAL_HOST: tagme-bank.producciondaw.cip.fpmislata.com
+      VIRTUAL_HOST: tagme-bank.${BUILD_ENV}ucciondaw.cip.fpmislata.com
     networks:
       - proxy_red
 
@@ -19,7 +19,7 @@ services:
         BUILD_ENV: ${BUILD_ENV}
     container_name: front-adm-tagme
     environment:
-      VIRTUAL_HOST: tagme-admin.producciondaw.cip.fpmislata.com
+      VIRTUAL_HOST: tagme-admin.${BUILD_ENV}ucciondaw.cip.fpmislata.com
     networks:
       - proxy_red
 
@@ -31,7 +31,7 @@ services:
           BUILD_ENV: ${BUILD_ENV}
     container_name: front-client-tagme
     environment:
-      VIRTUAL_HOST: tagme-client.producciondaw.cip.fpmislata.com
+      VIRTUAL_HOST: tagme-client.${VIRTUAL_HOST_CLIENT}
     networks:
       - proxy_red
 
@@ -41,7 +41,7 @@ services:
       dockerfile: bank-back.Dockerfile
     container_name: back-bank-tagme
     environment:
-      VIRTUAL_HOST: tagme-bank-back.producciondaw.cip.fpmislata.com
+      VIRTUAL_HOST: tagme-bank-back.${VIRTUAL_HOST_CLIENT}
       SPRING_PROFILES_ACTIVE: pre
     depends_on:
       mariadb-bank:
@@ -55,7 +55,7 @@ services:
       dockerfile: store-back.Dockerfile
     container_name: back-store-tagme
     environment:
-      VIRTUAL_HOST: tagme-store-back.producciondaw.cip.fpmislata.com
+      VIRTUAL_HOST: tagme-store-back.${VIRTUAL_HOST_CLIENT}
       SPRING_PROFILES_ACTIVE: pre
     depends_on:
       mariadb-store:
