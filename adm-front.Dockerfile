@@ -7,8 +7,11 @@ WORKDIR /opt/app
 RUN git clone https://github.com/Tag-Me-DAW2/store-admin-frontend.git
 WORKDIR /opt/app/store-admin-frontend
 RUN git switch --detach origin/develop
+
+ARG BUILD_ENV=production
+
 RUN npm ci
-RUN npm run build -- --configuration production
+RUN npm run build -- --configuration=$BUILD_ENV 
 
 FROM nginx:1.28.0-alpine3.21
 COPY --from=build /opt/app/store-admin-frontend/dist/store-admin-frontend/browser/ /usr/share/nginx/html

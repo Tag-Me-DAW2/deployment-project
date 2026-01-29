@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: bank-front.Dockerfile
+      args:
+        BUILD_ENV: ${BUILD_ENV}
     container_name: front-bank-tagme
     environment:
       VIRTUAL_HOST: tagme-bank.producciondaw.cip.fpmislata.com
@@ -13,6 +15,8 @@ services:
     build:
       context: .
       dockerfile: adm-front.Dockerfile
+      args:
+        BUILD_ENV: ${BUILD_ENV}
     container_name: front-adm-tagme
     environment:
       VIRTUAL_HOST: tagme-admin.producciondaw.cip.fpmislata.com
@@ -23,6 +27,8 @@ services:
     build:
       context: .
       dockerfile: client-front.Dockerfile
+      args:
+          BUILD_ENV: ${BUILD_ENV}
     container_name: front-client-tagme
     environment:
       VIRTUAL_HOST: tagme-client.producciondaw.cip.fpmislata.com
