@@ -1,9 +1,7 @@
 FROM maven:3.9.11-eclipse-temurin-21-noble
  
 ENV DEBIAN_FRONTEND=noninteractive
-docker compose down
-docker compose build --no-cache
-docker compose up -d
+
 RUN apt-get update
 RUN apt-get install -y git
  
