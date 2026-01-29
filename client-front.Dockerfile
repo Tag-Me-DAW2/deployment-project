@@ -1,14 +1,14 @@
 FROM node:22.19.0 AS build
 
 RUN apt-get install -y git
- 
+
 RUN mkdir /opt/app
 WORKDIR /opt/app
 RUN git clone https://github.com/Tag-Me-DAW2/store-client-frontend.git
 WORKDIR /opt/app/store-client-frontend
 RUN git switch --detach origin/develop
 
-ARG BUILD_ENV=production
+ARG BUILD_ENV=prod
 
 RUN npm ci
 RUN npm run build -- --configuration=$BUILD_ENV
