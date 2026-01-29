@@ -8,7 +8,7 @@ RUN git clone https://github.com/Tag-Me-DAW2/bank-frontend.git
 WORKDIR /opt/app/bank-frontend
 RUN git switch --detach origin/develop
 
-BUILD_ENV=production
+ARG BUILD_ENV=production
 
 RUN npm ci
 RUN npm run build -- --configuration=$BUILD_ENV
