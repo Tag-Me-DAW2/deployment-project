@@ -71,6 +71,8 @@ services:
       MYSQL_DATABASE: db_tagme_bank
       MYSQL_USER: tagme-bank
       MYSQL_PASSWORD: tagme-bank
+    volumes:
+      - /srv/docker/mariadb/bank:/var/lib/mysql
     networks:
       - proxy_red
     healthcheck:
@@ -88,6 +90,8 @@ services:
       MYSQL_DATABASE: db_tagme_store
       MYSQL_USER: tagme-store
       MYSQL_PASSWORD: tagme-store
+    volumes:
+      - /srv/docker/mariadb/store:/var/lib/mysql
     networks:
       - proxy_red
     healthcheck:
