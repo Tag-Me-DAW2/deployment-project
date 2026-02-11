@@ -4,9 +4,11 @@ RUN apt-get install -y git
 
 RUN mkdir /opt/app
 WORKDIR /opt/app
-RUN git clone https://github.com/Tag-Me-DAW2/bank-frontend.git
+
+ARG GIT_BRANCH=main
+RUN git clone --branch ${GIT_BRANCH} https://github.com/Tag-Me-DAW2/bank-frontend.git
+
 WORKDIR /opt/app/bank-frontend
-RUN git switch --detach origin/develop
 
 ARG BUILD_ENV=prod
 

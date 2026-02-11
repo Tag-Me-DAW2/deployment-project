@@ -1,71 +1,78 @@
 services:
-  front-bank:
+  tagme-front-bank:
     build:
       context: .
       dockerfile: bank-front.Dockerfile
       args:
+        GIT_BRANCH: ${GIT_BRANCH}
         BUILD_ENV: ${BUILD_ENV}
     container_name: front-bank-tagme
     environment:
-      VIRTUAL_HOST: tagme-bank.${BUILD_ENV}ucciondaw.cip.fpmislata.com
+      VIRTUAL_HOST: tagme-bank.${VIRTUAL_HOST_CLIENT}
     networks:
       - proxy_red
 
-  front-adm:
+  tagme-front-admin:
     build:
       context: .
       dockerfile: adm-front.Dockerfile
       args:
+        GIT_BRANCH: ${GIT_BRANCH}
         BUILD_ENV: ${BUILD_ENV}
-    container_name: front-adm-tagme
+    container_name: front-admin-tagme
     environment:
-      VIRTUAL_HOST: tagme-admin.${BUILD_ENV}ucciondaw.cip.fpmislata.com
+      VIRTUAL_HOST: tagme-admin.${VIRTUAL_HOST_CLIENT}
     networks:
       - proxy_red
 
-  front-client:
+  tagme-front-client:
     build:
       context: .
       dockerfile: client-front.Dockerfile
       args:
-          BUILD_ENV: ${BUILD_ENV}
+        GIT_BRANCH: ${GIT_BRANCH}
+        BUILD_ENV: ${BUILD_ENV}
     container_name: front-client-tagme
     environment:
       VIRTUAL_HOST: tagme-client.${VIRTUAL_HOST_CLIENT}
     networks:
       - proxy_red
 
-  back-bank:
+  tagme-back-bank:
     build:
       context: .
       dockerfile: bank-back.Dockerfile
+      args:
+          GIT_BRANCH: ${GIT_BRANCH}
     container_name: back-bank-tagme
     environment:
       VIRTUAL_HOST: tagme-bank-back.${VIRTUAL_HOST_CLIENT}
       SPRING_PROFILES_ACTIVE: pre
     depends_on:
-      mariadb-bank:
+      tagme-mariadb-bank:
         condition: service_healthy
     networks:
       - proxy_red
 
-  back-store:
+  tagme-back-store:
     build:
       context: .
       dockerfile: store-back.Dockerfile
+      args:
+          GIT_BRANCH: ${GIT_BRANCH}
     container_name: back-store-tagme
     environment:
       VIRTUAL_HOST: tagme-store-back.${VIRTUAL_HOST_CLIENT}
       SPRING_PROFILES_ACTIVE: pre
     depends_on:
-      mariadb-store:
+      tagme-mariadb-store:
         condition: service_healthy
     networks:
       - proxy_red
 
-  mariadb-bank:
+  tagme-mariadb-bank:
     image: mariadb:latest
-    container_name: mariadb-tagme-bank
+    container_name: tagme-mariadb-bank
     environment:
       MYSQL_ROOT_PASSWORD: tagme-bank
       MYSQL_DATABASE: db_tagme_bank
@@ -82,9 +89,9 @@ services:
       retries: 5
       start_period: 30s
 
-  mariadb-store:
+  tagme-mariadb-store:
     image: mariadb:latest
-    container_name: mariadb-tagme-store
+    container_name: tagme-mariadb-store
     environment:
       MYSQL_ROOT_PASSWORD: tagme-store
       MYSQL_DATABASE: db_tagme_store
