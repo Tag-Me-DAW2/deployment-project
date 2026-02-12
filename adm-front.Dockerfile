@@ -13,7 +13,7 @@ WORKDIR /opt/app/store-admin-frontend
 ARG BUILD_ENV=prod
 
 RUN npm ci
-RUN npm run build -- --configuration=$BUILD_ENV
+RUN npm run build -- --configuration=${BUILD_ENV}
 
 FROM nginx:1.28.0-alpine3.21
 COPY --from=build /opt/app/store-admin-frontend/dist/store-admin-frontend/browser/ /usr/share/nginx/html
