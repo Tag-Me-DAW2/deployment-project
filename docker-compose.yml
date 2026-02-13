@@ -1,5 +1,5 @@
 services:
-  front-bank:
+  tagme-front-bank:
     build:
       context: .
       dockerfile: bank-front.Dockerfile
@@ -11,7 +11,7 @@ services:
     networks:
       - proxy_red
 
-  front-adm:
+  tagme-front-adm:
     build:
       context: .
       dockerfile: adm-front.Dockerfile
@@ -23,7 +23,7 @@ services:
     networks:
       - proxy_red
 
-  front-client:
+  tagme-front-client:
     build:
       context: .
       dockerfile: client-front.Dockerfile
@@ -35,7 +35,7 @@ services:
     networks:
       - proxy_red
 
-  back-bank:
+  tagme-back-bank:
     build:
       context: .
       dockerfile: bank-back.Dockerfile
@@ -49,7 +49,7 @@ services:
     networks:
       - proxy_red
 
-  back-store:
+  tagme-back-store:
     build:
       context: .
       dockerfile: store-back.Dockerfile
@@ -63,9 +63,9 @@ services:
     networks:
       - proxy_red
 
-  mariadb-bank:
+  tagme-mariadb-bank:
     image: mariadb:latest
-    container_name: mariadb-tagme-bank
+    container_name: tagme-maridab-bank
     environment:
       MYSQL_ROOT_PASSWORD: tagme-bank
       MYSQL_DATABASE: db_tagme_bank
@@ -82,9 +82,9 @@ services:
       retries: 5
       start_period: 30s
 
-  mariadb-store:
+  tagme-mariadb-store:
     image: mariadb:latest
-    container_name: mariadb-tagme-store
+    container_name: tagme-mariadb-store
     environment:
       MYSQL_ROOT_PASSWORD: tagme-store
       MYSQL_DATABASE: db_tagme_store
