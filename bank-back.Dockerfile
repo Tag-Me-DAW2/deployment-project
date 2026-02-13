@@ -3,8 +3,8 @@ WORKDIR /opt/app
 
 RUN apt-get update && apt-get install -y git
 
-COPY pom.xml .
-RUN mvn dependency:go-offline
+RUN mkdir /opt/app
+WORKDIR /opt/app
 
 ARG GIT_BRANCH=main
 ARG CACHE_BUST=1
