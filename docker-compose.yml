@@ -44,7 +44,7 @@ services:
       dockerfile: bank-back.Dockerfile
       args:
           GIT_BRANCH: ${GIT_BRANCH}
-    container_name: back-bank-tagme
+    container_name: tagme-back-bank
     environment:
       VIRTUAL_HOST: tagme-bank-back.${VIRTUAL_HOST_CLIENT}
       SPRING_PROFILES_ACTIVE: ${BUILD_ENV}
