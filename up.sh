@@ -63,4 +63,4 @@ echo "🚀 Deploy manual/CI en entorno: $BUILD_ENV"
 
 # ---------- Docker ----------
 docker compose pull
-docker compose up -d --build
+docker compose up -d --build --remove-orphans
