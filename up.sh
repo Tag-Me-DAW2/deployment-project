@@ -61,6 +61,6 @@ export BUILD_ENV
 
 echo "🚀 Deploy manual/CI en entorno: $BUILD_ENV"
 
-# ---------- Docker ----------
-docker compose pull
-docker compose up -d --build --remove-orphans
+CACHE_BUST=$(date +%s)
+docker compose build --build-arg CACHE_BUST=$CACHE_BUST
+docker compose up -d --remove-orphans

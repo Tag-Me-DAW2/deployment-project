@@ -47,7 +47,7 @@ services:
     container_name: back-bank-tagme
     environment:
       VIRTUAL_HOST: tagme-bank-back.${VIRTUAL_HOST_CLIENT}
-      SPRING_PROFILES_ACTIVE: pre
+      SPRING_PROFILES_ACTIVE: ${BUILD_ENV}
     depends_on:
       tagme-mariadb-bank:
         condition: service_healthy
@@ -63,7 +63,7 @@ services:
     container_name: back-store-tagme
     environment:
       VIRTUAL_HOST: tagme-store-back.${VIRTUAL_HOST_CLIENT}
-      SPRING_PROFILES_ACTIVE: pre
+      SPRING_PROFILES_ACTIVE: ${BUILD_ENV}
     depends_on:
       tagme-mariadb-store:
         condition: service_healthy
