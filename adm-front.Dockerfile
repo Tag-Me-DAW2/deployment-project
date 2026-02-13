@@ -6,6 +6,7 @@ RUN mkdir /opt/app
 WORKDIR /opt/app
 
 ARG GIT_BRANCH=main
+ARG CACHE_BUST=1
 RUN git clone --branch ${GIT_BRANCH} https://github.com/Tag-Me-DAW2/store-admin-frontend.git
 
 WORKDIR /opt/app/store-admin-frontend
