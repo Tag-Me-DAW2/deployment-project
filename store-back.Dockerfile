@@ -7,10 +7,9 @@ RUN apt-get update && apt-get install -y git
 RUN mkdir /opt/app
 WORKDIR /opt/app
 
-ARG GIT_BRANCH=main
-ARG CACHE_BUST=1
+ARG GIT_BRANCH
 
-RUN git clone --branch ${GIT_BRANCH} https://github.com/Tag-Me-DAW2/store-backend.git
+RUN git clone --branch ${GIT_BRANCH} --depth 1 https://github.com/Tag-Me-DAW2/store-backend.git
 
 WORKDIR /opt/app/store-backend
 RUN mvn clean install -DskipTests
