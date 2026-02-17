@@ -5,13 +5,13 @@ RUN apt-get install -y git
 RUN mkdir /opt/app
 WORKDIR /opt/app
 
-ARG GIT_BRANCH=main
-ARG CACHE_BUST=1
-RUN git clone --branch ${GIT_BRANCH} https://github.com/Tag-Me-DAW2/store-admin-frontend.git
+ARG GIT_BRANCH
+ARG BUILD_ENV
+
+RUN git clone --branch ${GIT_BRANCH} --depth 1 https://github.com/Tag-Me-DAW2/store-admin-frontend.git
 
 WORKDIR /opt/app/store-admin-frontend
 
-ARG BUILD_ENV=prod
 
 RUN npm ci
 RUN npm run build -- --configuration=${BUILD_ENV}
