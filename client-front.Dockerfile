@@ -1,14 +1,12 @@
 FROM node:22.19.0 AS build
 
-RUN apt-get install -y git
-
 RUN mkdir /opt/app
 WORKDIR /opt/app
 
 ARG GIT_BRANCH
 ARG BUILD_ENV
 
-RUN git clone --branch ${GIT_BRANCH} --depth 1 https://github.com/Tag-Me-DAW2/store-client-frontend.git
+COPY ./repos/store-client-frontend /opt/app/store-client-frontend
 
 WORKDIR /opt/app/store-client-frontend
 
