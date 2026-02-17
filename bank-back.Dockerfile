@@ -1,13 +1,11 @@
 FROM maven:3.9.11-eclipse-temurin-21-noble
 
-RUN apt-get update && apt-get install -y git
-
 RUN mkdir /opt/app
 WORKDIR /opt/app
 
 ARG GIT_BRANCH
 
-RUN git clone --branch ${GIT_BRANCH} --depth 1 https://github.com/Tag-Me-DAW2/bank-backend.git
+COPY ./repos/bank-backend /opt/app/bank-backend
 
 WORKDIR /opt/app/bank-backend
 RUN mvn clean install -DskipTests
