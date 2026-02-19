@@ -1,66 +1,70 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -e
 
-SCRIPT_NAME="$(basename "$0")"
-
-show_help() {
-  cat << EOF
-Uso:
-  $SCRIPT_NAME [prod|preprod]
-
-Sin argumentos:
-  - Usa la rama actual (main → prod, develop → preprod)
-
-Ejemplos:
-  $SCRIPT_NAME
-  $SCRIPT_NAME prod
-  $SCRIPT_NAME preprod
-EOF
-}
-
-# ---------- Help ----------
-if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
-  show_help
-  exit 0
+if [[ "$1" != "prod" && "$1" != "preprod" ]]; then
+  echo "Uso: $0 [prod|preprod]"
+  exit 1
 fi
 
-# ---------- Entorno (manual tiene prioridad) ----------
-if [[ "${1:-}" == "prod" || "${1:-}" == "preprod" ]]; then
-  BUILD_ENV="$1"
+if [[ "$1" == "prod" ]]; then
+  BRANCH="main"
+  BUILD_ENV="prod"
+  VIRTUAL_HOST_CLIENT="producciondaw.cip.fpmislata.com"
 else
-  # CI o ejecución normal → usar rama
-  BRANCH="${GITHUB_REF_NAME:-$(git branch --show-current)}"
-
-  case "$BRANCH" in
-    main)
-      BUILD_ENV="prod"
-      ;;
-    develop)
-      BUILD_ENV="preprod"
-      ;;
-    *)
-      echo "ℹ️ Rama '$BRANCH' no despliega"
-      exit 0
-      ;;
-  esac
+  BRANCH="develop"
+  BUILD_ENV="preprod"
+  VIRTUAL_HOST_CLIENT="preproducciondaw.cip.fpmislata.com"
 fi
 
-# ---------- Variables por entorno ----------
-case "$BUILD_ENV" in
-  prod)
-    export VIRTUAL_HOST_CLIENT=producciondaw.cip.fpmislata.com
-    export GIT_BRANCH=main
-    ;;
-  preprod)
-    export VIRTUAL_HOST_CLIENT=preproducciondaw.cip.fpmislata.com
-    export GIT_BRANCH=develop
-    ;;
-esac
+echo "Desplegando $1 (rama $BRANCH)..."
 
-export BUILD_ENV
+export GIT_BRANCH=$BRANCH
+export BUILD_ENV=$BUILD_ENV
+export VIRTUAL_HOST_CLIENT=$VIRTUAL_HOST_CLIENT
 
-echo "🚀 Deploy manual/CI en entorno: $BUILD_ENV"
+ROOT_DIR="$(pwd)"
+CLONE_DIR="$ROOT_DIR/repos"
+mkdir -p "$CLONE_DIR"
 
-CACHE_BUST=$(date +%s)
-docker compose build --build-arg CACHE_BUST=$CACHE_BUST
-docker compose up -d --remove-orphans
+REPOS=(
+  https://github.com/Tag-Me-DAW2/store-client-frontend.git
+  https://github.com/Tag-Me-DAW2/store-admin-frontend.git
+  https://github.com/Tag-Me-DAW2/bank-frontend.git
+  https://github.com/Tag-Me-DAW2/store-backend.git
+  https://github.com/Tag-Me-DAW2/bank-backend.git
+)
+
+for entry in "${REPOS[@]}"; do
+  url="$entry"
+  repo=$(basename -s .git "$url")
+  target="$CLONE_DIR/$repo"
+
+  if [ -d "$target/.git" ]; then
+    echo "Comprobando cambios en $repo..."
+
+    git -C "$target" fetch --depth=1 origin "$BRANCH" || git -C "$target" fetch --all --prune
+
+    LOCAL_COMMIT=$(git -C "$target" rev-parse HEAD)
+    REMOTE_COMMIT=$(git -C "$target" rev-parse origin/$BRANCH)
+
+    if [ "$LOCAL_COMMIT" != "$REMOTE_COMMIT" ]; then
+      echo "Actualizando $repo a origin/$BRANCH"
+      git -C "$target" checkout "$BRANCH" || git -C "$target" checkout -b "$BRANCH"
+      git -C "$target" reset --hard "origin/$BRANCH"
+    else
+      echo "$repo sin cambios, se mantiene tal cual"
+    fi
+  else
+    echo "Clonando $repo desde $url (rama $BRANCH)..."
+    git clone --depth 1 --branch "$BRANCH" "$url" "$target" || {
+      echo "AVISO: no se pudo clonar $url. Continúo con el siguiente."
+    }
+  fi
+done
+
+echo "Clones/updates finalizados. Lanzando build..."
+
+docker compose build --pull
+docker compose up -d
+
+echo "Despliegue finalizado."
