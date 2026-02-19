@@ -65,6 +65,6 @@ done
 echo "Clones/updates finalizados. Lanzando build..."
 
 docker compose build --pull
-docker compose -p "" up -d
+docker compose -p "project" up -d
 
 echo "Despliegue finalizado."
