@@ -33,17 +33,27 @@ REPOS=(
   https://github.com/Tag-Me-DAW2/store-backend.git
   https://github.com/Tag-Me-DAW2/bank-backend.git
 )
-for entry in "${REPOS[@]}"; do
 
+for entry in "${REPOS[@]}"; do
   url="$entry"
   repo=$(basename -s .git "$url")
   target="$CLONE_DIR/$repo"
 
   if [ -d "$target/.git" ]; then
-    echo "Reseteando $repo en $target a origin/$BRANCH (último commit)..."
+    echo "Comprobando cambios en $repo..."
+
     git -C "$target" fetch --depth=1 origin "$BRANCH" || git -C "$target" fetch --all --prune
-    git -C "$target" checkout "$BRANCH" || git -C "$target" checkout -b "$BRANCH"
-    git -C "$target" reset --hard "origin/$BRANCH"
+
+    LOCAL_COMMIT=$(git -C "$target" rev-parse HEAD)
+    REMOTE_COMMIT=$(git -C "$target" rev-parse origin/$BRANCH)
+
+    if [ "$LOCAL_COMMIT" != "$REMOTE_COMMIT" ]; then
+      echo "Actualizando $repo a origin/$BRANCH"
+      git -C "$target" checkout "$BRANCH" || git -C "$target" checkout -b "$BRANCH"
+      git -C "$target" reset --hard "origin/$BRANCH"
+    else
+      echo "$repo sin cambios, se mantiene tal cual"
+    fi
   else
     echo "Clonando $repo desde $url (rama $BRANCH)..."
     git clone --depth 1 --branch "$BRANCH" "$url" "$target" || {
